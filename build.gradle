@@ -18,6 +18,14 @@ springBoot {
   mainClassName = 'io.pivotal.pal.tracker.PalTrackerApplication'
 }
 
+bootRun.environment([
+    "WELCOME_MESSAGE": "hello",
+])
+
+test.environment([
+    "WELCOME_MESSAGE": "Hello from test",
+])
+
 group = 'io.pivotal.pal.tracker'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
