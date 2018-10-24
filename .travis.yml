@@ -27,7 +27,7 @@ jobs:
       language: bash
       script:
         - echo "Downloading $RELEASE_TAG"
-        - wget -P build/libs https://github.com/$GITHUB_USERNAME/next-pal-tracker/archive/$RELEASE_TAG.jar
+        - wget -P build/libs https://github.com/$GITHUB_USERNAME/next-pal-tracker/releases/tag/$RELEASE_TAG/next-pal-tracker.jar
       before_deploy:
         - echo "Deploying $RELEASE_TAG to review"
       deploy:
