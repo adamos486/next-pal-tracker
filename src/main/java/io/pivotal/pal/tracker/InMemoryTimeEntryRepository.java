@@ -29,10 +29,12 @@ public class InMemoryTimeEntryRepository implements TimeEntryRepository {
   }
 
   @Override public TimeEntry create(TimeEntry newEntry) {
-    newEntry.setId(currentId);
-    entries.put(currentId, newEntry);
-    TimeEntry entry = entries.get(currentId);
-    currentId++;
-    return entry;
+    newEntry.print();
+    if (newEntry.getId() == -1) {
+      newEntry.setId(currentId);
+      currentId++;
+    }
+    entries.put(newEntry.getId(), newEntry);
+    return entries.get(newEntry.getId());
   }
 }
