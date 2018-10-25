@@ -30,4 +30,17 @@ public class TimeEntry {
   public long getId() {
     return this.id;
   }
+
+  protected void setId(long id) {
+    this.id = id;
+  }
+
+  @Override public boolean equals(Object obj) {
+    TimeEntry incoming = (TimeEntry)obj;
+    return (this.id == incoming.id) &&
+        (this.projectId == incoming.projectId) &&
+        (this.userId == incoming.userId) &&
+        (this.date.equals(incoming.date)) &&
+        (this.hours == incoming.hours);
+  }
 }
