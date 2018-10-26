@@ -5,18 +5,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mysql.cj.jdbc.MysqlDataSource;
+import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
-@SpringBootApplication()
-public class PalTrackerApplication {
+@SpringBootApplication() public class PalTrackerApplication {
   public static void main(String[] args) {
     SpringApplication.run(PalTrackerApplication.class, args);
   }
 
+  @Autowired private DataSource dataSource;
+
   @Bean TimeEntryRepository timeEntryRepository() {
+    if (dataSource != null) {
+      System.out.println("DETECTED SOME DATA SOURCE!");
+      return new JdbcTimeEntryRepository(dataSource);
+    }
     MysqlDataSource dataSource = new MysqlDataSource();
     dataSource.setUrl(System.getenv("SPRING_DATASOURCE_URL"));
     return new JdbcTimeEntryRepository(dataSource);
