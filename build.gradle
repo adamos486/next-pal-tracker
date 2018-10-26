@@ -2,7 +2,7 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 
 buildscript {
   ext {
-    springBootVersion = '2.0.6.RELEASE'
+    springBootVersion = '1.5.4.RELEASE'
   }
   repositories {
     mavenCentral()
@@ -14,7 +14,7 @@ buildscript {
 
 plugins {
   id "java"
-  id "org.springframework.boot" version "2.0.6.RELEASE"
+  id "org.springframework.boot" version "1.5.4.RELEASE"
   id "org.flywaydb.flyway" version "4.2.0"
 }
 
@@ -27,11 +27,12 @@ repositories {
 }
 
 dependencies {
-  compile("org.springframework.boot:spring-boot-starter-jdbc:2.0.6.RELEASE")
+  compile("org.springframework.boot:spring-boot-starter-jdbc:1.5.4.RELEASE")
   compile("mysql:mysql-connector-java:8.0.11")
   implementation('org.springframework.boot:spring-boot-starter-web')
   compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.1")
   testImplementation('org.springframework.boot:spring-boot-starter-test')
+  compile("org.springframework.boot:spring-boot-starter-actuator")
 }
 
 //apply plugin: 'java'
@@ -40,20 +41,18 @@ dependencies {
 apply plugin: 'io.spring.dependency-management'
 
 
-springBoot {
-  mainClassName = 'io.pivotal.pal.tracker.PalTrackerApplication'
-}
-
 def developmentDbUrl = "jdbc:mysql://localhost:3306/tracker_dev?user=tracker&useSSL=false&useTimezone=true&serverTimezone=UTC&useLegacyDatetimeCode=false"
 bootRun.environment([
     "WELCOME_MESSAGE": "hello",
     "SPRING_DATASOURCE_URL": developmentDbUrl,
+    "MANAGEMENT_SECURITY_ENABLED": false,
 ])
 
 def testDbUrl = "jdbc:mysql://localhost:3306/tracker_test?user=tracker&useSSL=false&useTimezone=true&serverTimezone=UTC&useLegacyDatetimeCode=false"
 test.environment([
     "WELCOME_MESSAGE": "Hello from test",
     "SPRING_DATASOURCE_URL": testDbUrl,
+    "MANAGEMENT_SECURITY_ENABLED": false,
 ])
 
 flyway {
@@ -65,4 +64,8 @@ flyway {
 
 task testMigrate(type: FlywayMigrateTask) {
   url = testDbUrl
+}
+
+springBoot {
+  buildInfo()
 }
